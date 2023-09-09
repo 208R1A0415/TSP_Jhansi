@@ -1,0 +1,11 @@
+AWS certifications
+aws interview questions
+AWS vpc fqc (frequently asked que)
+AWS overview
+lambda,devops tools,docker,kuberneties,
+AWS github Study material
+practicals
+courses on udemy
+projects on github.
+2hrs a day.
+Udemy,utube nd all.(we need to select the course which we are understanding )

@@ -1,0 +1,8 @@
+pg-1 title(name,reg id,dept)
+pg-2 abstarct
+pg-3 structure and schema(table name,filed name,model classes(crate java file,just write variables ,getter and setter methods)
+           before monday submit
+monday eveng mid term assessment
+
+
+
