@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .blog-post {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+        }
+
+        .button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #555;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .image-upload-label {
+            display: inline-block;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .image {
+            max-width: 100%;
+            height: auto;
+        }
+        .image-upload-label{
+            margin-top: 2%;
+        }
+       
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Blog Management System</h1>
+    </header>
+
+    <div class="container">
+        <div>
+            <button class="button" onclick="createPost()">Create New Post</button>
+        </div>
+
+        <div id="postList">
+            <!-- Blog posts will be displayed here -->
+        </div>
+    </div>
+
+    <!-- Modal for editing a post -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Edit Post</h2>
+            <input type="text" id="editTitle" placeholder="Title">
+            <textarea id="editContent" placeholder="Content"></textarea><br>
+            <label for="editImage" class="image-upload-label">Select Image</label>
+            <input type="file" id="editImage" accept="image/*" onchange="displaySelectedImage()">
+            <img id="selectedImage" class="image" alt="Selected Image">
+            <button class="button" onclick="saveEdit()">Save</button></br>
+        </div>
+    </div>
+
+    <script>
+        const posts = []; // Array to store blog posts
+
+        // Function to create a new blog post
+        function createPost() {
+            const title = prompt("Enter the post title:");
+            const content = prompt("Enter the post content:");
+            
+            if (title && content) {
+                const post = { title, content, image: '' };
+                posts.push(post);
+                displayPosts();
+            }
+        }
+
+        // Function to display blog posts
+        function displayPosts() {
+            const postList = document.getElementById("postList");
+            postList.innerHTML = "";
+
+            posts.forEach((post, index) => {
+                const blogPost = document.createElement("div");
+                blogPost.classList.add("blog-post");
+
+                const title = document.createElement("h2");
+                title.textContent = post.title;
+
+                const content = document.createElement("p");
+                content.textContent = post.content;
+
+                const editButton = document.createElement("button");
+                editButton.classList.add("button");
+                editButton.textContent = "Edit";
+                editButton.onclick = () => openEditModal(index);
+
+                const deleteButton = document.createElement("button");
+                deleteButton.classList.add("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.onclick = () => deletePost(index);
+
+                const image = document.createElement("img");
+                image.src = post.image;
+                image.alt = "Post Image";
+                image.classList.add("image");
+
+                blogPost.appendChild(title);
+                blogPost.appendChild(content);
+                blogPost.appendChild(image);
+                blogPost.appendChild(editButton);
+                blogPost.appendChild(deleteButton);
+
+                postList.appendChild(blogPost);
+            });
+        }
+
+        // Function to open the edit modal
+        function openEditModal(index) {
+            const editModal = document.getElementById("editModal");
+            const editTitle = document.getElementById("editTitle");
+            const editContent = document.getElementById("editContent");
+            const editImage = document.getElementById("editImage");
+            const selectedImage = document.getElementById("selectedImage");
+
+            editTitle.value = posts[index].title;
+            editContent.value = posts[index].content;
+            selectedImage.src = posts[index].image;
+
+            // Function to save the edited post
+            function saveEdit() {
+                posts[index].title = editTitle.value;
+                posts[index].content = editContent.value;
+                posts[index].image = selectedImage.src;
+                displayPosts();
+                closeModal();
+            }
+
+            const saveButton = document.querySelector("#editModal .button");
+            saveButton.onclick = saveEdit;
+
+            editModal.style.display = "block";
+        }
+
+        // Function to close the edit modal
+        function closeModal() {
+            const editModal = document.getElementById("editModal");
+            editModal.style.display = "none";
+        }
+
+        // Function to delete a post
+        function deletePost(index) {
+            posts.splice(index, 1);
+            displayPosts();
+        }
+
+        // Function to display the selected image
+        function displaySelectedImage() {
+            const editImage = document.getElementById("editImage");
+            const selectedImage = document.getElementById("selectedImage");
+
+            const file = editImage.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    selectedImage.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        displayPosts();
+    </script>
+</body>
+</html>
